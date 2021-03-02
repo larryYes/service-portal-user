@@ -1,0 +1,16 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+logs
+.idea
+*.iml
+*.ipr
+*.iws
+pom.xml.versionsBackup
+service-portal-user-api/target/
+service-portal-user-facade/target/
+service-portal-user-common/target/
+service-portal-user-sdk-cloud/target/
+service-portal-user-sdk/target/

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tyymt.wxplatform.service.portal.user.common.mapper.SysSystemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tyymt.wxplatform.service.portal.user.common.model.SysSystem">
+        <id column="id" property="id"/>
+        <id column="system_code" property="systemCode"/>
+        <id column="system_name" property="systemName"/>
+        <id column="system_picture" property="systemPicture"/>
+        <id column="system_url" property="systemUrl"/>
+        <id column="leader_name" property="leaderName"/>
+        <id column="phone" property="phone"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="del_flag" property="delFlag"/>
+    </resultMap>
+
+    <select id="findSystemByUserId"
+            resultType="com.tyymt.wxplatform.service.portal.user.common.model.SysSystem">
+                SELECT DISTINCT
+                    s.id,
+                    s.system_code,
+                    s.system_name,
+                    s.system_picture,
+                    s.system_url,
+                    s.leader_name,
+                    s.phone,
+                    s.create_time,
+                    s.update_time,
+                    s.enable_flag
+                FROM
+                    sys_user_role ur
+                    INNER JOIN sys_role r ON r.id = ur.role_id
+                    INNER JOIN sys_system s ON s.id = r.system_id
+                    AND ur.user_id = 1
+                WHERE
+                    ur.del_flag = '0'
+                    AND r.del_flag = '0'
+                    AND s.del_flag = '0'
+    </select>
+
+    <select id="getSystemAndRole" resultType="com.tyymt.wxplatform.service.portal.user.sdk.http.resp.system.SystemRoleRespDto">
+        SELECT
+            r.id,
+            r.role_name AS NAME,
+            r.system_id AS parent_id
+        FROM
+            sys_role r
+            <if test="userId != null">
+                INNER JOIN sys_user_role ur
+                ON r.id=ur.role_id
+            </if>
+        WHERE
+            r.del_flag = 0
+            <if test="userId != null">
+                AND
+                ur.del_flag = 0
+                AND ur.user_id = #{userId}
+            </if>
+        UNION
+        SELECT
+            id,
+            `system_name` AS NAME,
+            0 AS parent_id
+        FROM
+            sys_system
+        WHERE
+            del_flag = 0
+    </select>
+
+</mapper>

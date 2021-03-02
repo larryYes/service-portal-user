@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tyymt.wxplatform</groupId>
+    <artifactId>service-portal-user-sdk</artifactId>
+    <version>1.0.1</version>
+    <name>service-portal-user-sdk</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <lombok.version>1.18.12</lombok.version>
+        <swagger-annotations.version>1.5.24</swagger-annotations.version>
+    </properties>
+
+    <dependencies>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <!--swagger注解依赖-->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger-annotations.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>DCone</id>
+            <url>https://nexus.dev.wh.digitalchina.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>DCone</id>
+            <url>https://nexus.dev.wh.digitalchina.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

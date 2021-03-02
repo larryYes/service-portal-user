@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tyymt.wxplatform.service.portal.user.common.mapper.SysDeptMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tyymt.wxplatform.service.portal.user.common.model.SysDept">
+        <id column="id" property="id"/>
+        <id column="dept_name" property="deptName"/>
+        <result column="to_dept_name" property="toDeptName"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="leader_name" property="leaderName"/>
+        <result column="phone" property="phone"/>
+        <result column="sort" property="sort"/>
+    </resultMap>
+
+    <select id="getDeptByPage" resultMap="BaseResultMap">
+        SELECT a.id,
+        a.dept_name,
+        b.dept_name as to_dept_name,
+        a.parent_id,
+        a.leader_name,
+        a.phone,
+        a.sort
+        FROM sys_dept a
+        LEFT JOIN sys_dept b ON a.parent_id = b.id
+        <where>
+            a.del_flag = '0'
+            <if test="query.id != null">
+                and a.id =#{query.id}
+            </if>
+            <if test="query.deptName != null and query.deptName != ''">
+                and a.dept_name LIKE CONCAT('%',#{query.deptName},'%')
+            </if>
+            <if test="query.toDeptName != null and query.toDeptName != ''">
+                and b.dept_name LIKE CONCAT('%',#{query.toDeptName},'%')
+            </if>
+            <if test="query.leaderName != null and query.leaderName != ''">
+                and a.leader_name LIKE CONCAT('%',#{query.leaderName},'%')
+            </if>
+            <if test="query.parentId != null">
+                and a.parent_id = #{query.parentId}
+            </if>
+        </where>
+        order by a.parent_id, a.sort
+        asc
+    </select>
+</mapper>

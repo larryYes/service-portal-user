@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.tyymt.wxplatform.service.portal.user.sdk.cloud.config.FeignConfig,\
+com.tyymt.wxplatform.service.portal.user.sdk.cloud.config.ServiceConfig

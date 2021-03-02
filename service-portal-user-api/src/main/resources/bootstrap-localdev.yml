@@ -1,0 +1,52 @@
+spring:
+  profiles:
+    # discovery-registry和discovery-local，不使用nacos就写 discovery-local，走url调用服务
+    include: discovery-registry
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    #数据库地址
+    url: jdbc:mysql://10.3.70.132:30307/order_scenic?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    #数据库账号
+    username: root
+    #数据库密码
+    password: V72MlqMVcP
+    #hikari连接池
+    hikari:
+      #2*cpu
+      maximum-pool-size: 16
+      #cpu
+      minimum-idle: 8
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  redis:
+    host: 10.3.70.132
+    port: 32001
+    timeout: 3s
+    database: 6
+    password: DCone7888#
+    jedis:
+      pool:
+        max-idle: 50
+        min-idle: 5
+        max-wait: 2s
+        max-active: 20
+#服务注册
+bestjoy:
+  discovery:
+    #nacos地址
+    server-addr: 10.3.69.92:8848
+    #注册的服务名，一定要和spring.application.name一致
+    service-name: ${spring.application.name}
+    namespace: ns-beiming
+
+objectstorage:
+  cos:
+    access-key: AKIDjGXalojOi02K8gTg8KJFl39nFqBWqlTv
+    secret-key: oLwJQlqfGYcPxHOSO7rmwrdEagV6RphJ
+    endpoint: http://cos.ap-chengdu.myqcloud.com # 相关云服务商处获取
+    active: true          # 开关，不用的话可以关掉
+    path-style-access: true

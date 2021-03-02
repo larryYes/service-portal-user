@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>labrador-cloud-framework</artifactId>
+        <groupId>net.bestjoy</groupId>
+        <version>1.0.7-WENLVMA</version>
+        <!--注意这里请不要使用相对路径标签： <relativePath/> -->
+    </parent>
+    <groupId>com.tyymt.wxplatform</groupId>
+    <artifactId>service-portal-user</artifactId>
+    <version>1.0.1</version>
+    <name>service-portal-user</name>
+    <description>Demo project for Spring Boot</description>
+
+    <!--版本属性-->
+    <properties>
+        <java.version>1.8</java.version>
+        <labrador.cloud.version>1.0.7-WENLVMA</labrador.cloud.version>
+        <easyexcel.version>2.2.3</easyexcel.version>
+        <jwt.version>0.9.1</jwt.version>
+    </properties>
+
+    <!--打包方式-->
+    <packaging>pom</packaging>
+
+
+    <!--各个子模块-->
+    <modules>
+        <module>service-portal-user-api</module>
+        <module>service-portal-user-facade</module>
+        <module>service-portal-user-common</module>
+        <module>service-portal-user-sdk-cloud</module>
+        <module>service-portal-user-sdk</module>
+    </modules>
+
+    <!--引入基础框架的服务发现和web模块-->
+    <dependencies>
+        <dependency>
+            <groupId>net.bestjoy</groupId>
+            <artifactId>labrador-cloud-discovery</artifactId>
+            <version>${labrador.cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bestjoy</groupId>
+            <artifactId>labrador-cloud-web</artifactId>
+            <version>${labrador.cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bestjoy</groupId>
+            <artifactId>labrador-cloud-cache</artifactId>
+            <version>${labrador.cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>${easyexcel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bestjoy</groupId>
+            <artifactId>labrador-cloud-oss</artifactId>
+            <version>${labrador.cloud.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <!--依赖管理-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>net.bestjoy</groupId>
+                <artifactId>labrador-cloud-dependencies</artifactId>
+                <version>${labrador.cloud.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tyymt.wxplatform</groupId>
+                <artifactId>service-portal-user-sdk</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tyymt.wxplatform</groupId>
+                <artifactId>service-portal-user-sdk-cloud</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tyymt.wxplatform</groupId>
+                <artifactId>service-portal-user-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tyymt.wxplatform</groupId>
+                <artifactId>service-portal-user-facade</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tyymt.wxplatform</groupId>
+                <artifactId>service-portal-user-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>DCone</id>
+            <url>https://nexus.dev.wh.digitalchina.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>DCone</id>
+            <url>https://nexus.dev.wh.digitalchina.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

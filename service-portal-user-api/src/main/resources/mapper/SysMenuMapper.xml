@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tyymt.wxplatform.service.portal.user.common.mapper.SysMenuMapper">
+
+    <select id="selectMenu" resultType="com.tyymt.wxplatform.service.portal.user.sdk.http.resp.menu.MenuInfoRespDto">
+        SELECT
+            m.id,
+            m.system_id,
+            s.system_name,
+            m.`name`,
+            m.parent_id,
+            m.path,
+            m.permission,
+            m.icon,
+            m.sort,
+            m.keep_alive,
+            m.type
+        FROM
+            sys_menu m
+            INNER JOIN sys_system s ON m.system_id = s.id
+            AND m.del_flag = '0'
+            AND s.del_flag = '0'
+        <where>
+            <if test=" systemName != null and systemName != ''">
+                and s.system_name LIKE CONCAT('%',#{systemName},'%')
+            </if>
+            <if test="systemId != null">
+                and m.system_id =#{systemId}
+            </if>
+        </where>
+        ORDER BY m.create_time DESC
+    </select>
+
+
+</mapper>

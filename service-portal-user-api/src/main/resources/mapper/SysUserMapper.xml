@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tyymt.wxplatform.service.portal.user.common.mapper.SysUserMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tyymt.wxplatform.service.portal.user.common.dto.SysUserDTO">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="enable_flag" property="enableFlag"/>
+        <result column="del_flag" property="delFlag"/>
+        <result column="remark" property="remark"/>
+        <result column="dept_name" property="deptName"/>
+        <collection property="roleList" ofType="com.tyymt.wxplatform.service.portal.user.common.model.SysRole"
+                    select="com.tyymt.wxplatform.service.portal.user.common.mapper.SysUserMapper.getRoleAuth"
+                    column="id">
+        </collection>
+    </resultMap>
+
+    <insert id="saveReturnId" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user(user_name, nick_name, password, phone, email, dept_id, create_time, update_time,
+                             enable_flag, del_flag, remark)
+        values (#{userName}, #{nickName}, #{password}, #{phone}, #{email}, #{deptId}, #{createTime},
+                #{updateTime}, #{enableFlag}, #{delFlag}, #{remark})
+    </insert>
+
+    <select id="getUserVosPage" resultMap="BaseResultMap">
+        SELECT
+        a.id,
+        a.nick_name,
+        a.user_name,
+        a.phone,
+        a.email,
+        a.create_time ,
+        a.update_time,
+        a.del_flag,
+        a.enable_flag,
+        a.remark,
+        a.dept_id,
+        b.dept_name
+        FROM
+        sys_user a
+        LEFT JOIN sys_dept b ON b.id = a.dept_id
+        <where>
+            a.del_flag = '0'
+            <if test="query.id != null">
+                and a.id =#{query.id}
+            </if>
+            <if test="query.userName != null and query.userName != ''">
+                and a.user_name =#{query.userName}
+            </if>
+            <if test="query.nickName != null and query.nickName != ''">
+                and a.nick_name LIKE CONCAT('%',#{query.nickName},'%')
+            </if>
+            <if test="query.enableFlag != null and query.enableFlag != ''">
+                and a.enable_flag = #{query.enableFlag}
+            </if>
+            <if test="query.deptId != null">
+                and a.dept_id =#{query.deptId}
+            </if>
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="getUserList" resultMap="BaseResultMap" >
+        SELECT
+        a.id,
+        a.nick_name,
+        a.user_name,
+        a.password,
+        a.phone,
+        a.email,
+        a.create_time ,
+        a.update_time,
+        a.del_flag,
+        a.enable_flag,
+        a.remark,
+        a.dept_id,
+        b.dept_name
+        FROM
+        sys_user a
+        LEFT JOIN sys_dept b ON b.id = a.dept_id
+        <where>
+            a.del_flag = '0'
+            <if test="query.id != null">
+                and a.id =#{query.id}
+            </if>
+            <if test="query.userName != null and query.userName != ''">
+                and a.user_name =#{query.userName}
+            </if>
+            <if test="query.nickName != null and query.nickName != ''">
+                and a.nick_name LIKE CONCAT('%',#{query.nickName},'%')
+            </if>
+            <if test="query.enableFlag != null and query.enableFlag != ''">
+                and a.enable_flag = #{query.enableFlag}
+            </if>
+            <if test="query.deptId != null">
+                and a.dept_id =#{query.deptId}
+            </if>
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="getUserByUserName" resultMap="BaseResultMap">
+        SELECT
+        a.id,
+        a.password,
+        a.nick_name,
+        a.user_name,
+        a.phone,
+        a.email,
+        a.dept_id,
+        a.enable_flag,
+        b.dept_name
+        FROM
+        sys_user a
+        LEFT JOIN sys_dept b ON b.id = a.dept_id
+        <where>
+            a.del_flag = '0'
+            and a.user_name =#{userName}
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+
+
+    <select id="getUserAuth" resultType="com.tyymt.wxplatform.service.portal.user.common.model.SysMenu">
+        SELECT
+            m.id,
+            m.system_id,
+            m.`name`,
+            m.permission,
+            m.path,
+            m.parent_id,
+            m.icon,
+            m.sort,
+            m.keep_alive,
+            m.type,
+            m.create_time,
+            m.update_time
+        FROM
+            sys_role r
+            INNER JOIN sys_role_menu rm ON rm.role_id = r.id
+            INNER JOIN sys_user_role ur ON ur.role_id = r.id
+            INNER JOIN sys_menu m ON rm.menu_id = m.id
+            INNER JOIN sys_system s ON s.id=r.system_id
+        WHERE
+            s.system_code = #{systemCode}
+            AND ur.user_id =  #{userId}
+            AND r.del_flag = '0'
+            AND ur.del_flag = '0'
+            AND rm.del_flag = '0'
+            AND m.del_flag = '0'
+            AND s.del_flag = '0';
+    </select>
+
+<!--    根据用户ID查询角色信息-->
+    <select id="getRoleAuth" resultType="com.tyymt.wxplatform.service.portal.user.sdk.http.resp.role.RoleRespDto">
+            SELECT
+            role_code,
+            role_name
+            FROM
+            sys_role r
+            INNER JOIN sys_user_role ur ON r.id = ur.role_id
+            <where>
+                r.del_flag = '0'
+                AND ur.del_flag = '0'
+                AND ur.user_id = #{userId}
+            </where>;
+    </select>
+
+
+</mapper>
